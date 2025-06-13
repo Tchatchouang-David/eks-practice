@@ -55,7 +55,7 @@ pipeline {
         }
         stage('Build our Backend Image') {
             steps {
-                dir('AWS/project/python-three-tier-app/backend') {
+                dir('/backend') {
                     sh 'ls'
                     // Modify your parameters.py file with the provided environment variables
                     sh """
@@ -149,7 +149,7 @@ pipeline {
         stage("Build our frontend Image") {
                 steps {
                     // switch into your frontend folder
-                    dir('AWS/project/python-three-tier-app/frontend') {
+                    dir('/frontend') {
                         // list files (optional sanity check)
                         sh 'ls'  
                         //update the frontend app.py endpoints to reflect the backend url 

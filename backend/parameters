@@ -1,0 +1,4 @@
+master_username = "admin"  # Remplacez par votre nom d'utilisateur RDS
+db_password = "Bonaberi2022"         # Remplacez par votre mot de passe RDS
+endpoint = "database-1.cf6y2u2o0z6m.ca-central-1.rds.amazonaws.com"
+db_instance_name = "database-1"  # Remplacez par le nom de votre base de données
