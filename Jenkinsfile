@@ -109,7 +109,7 @@ pipeline {
             }
         }
 
-        stage("Push to Docker Hub") {
+        stage("Push to Docker Hub the Backend Image") {
             steps {
                 // Use Jenkins credentials (create a 'dockerhub-credentials' with your Docker Hub username/password)
                 withCredentials([usernamePassword(
@@ -201,7 +201,7 @@ pipeline {
                 }
             }
         }
-        stage("Push to Docker Hub") {
+        stage("Push to Docker Hub the Frontend Image") {
         steps {
             // Use Jenkins credentials (create a 'dockerhub-credentials' with your Docker Hub username/password)
             withCredentials([usernamePassword(
