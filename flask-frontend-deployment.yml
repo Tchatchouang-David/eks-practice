@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-frontend-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: flask-frontend
+  template:
+    metadata:
+      labels:
+        app: flask-frontend
+    spec:
+      containers:
+      - name: flask-frontend-container
+        image: davidmanuel/simple-todo-flask-frontend:latest
+        ports:
+        - containerPort: 4000
