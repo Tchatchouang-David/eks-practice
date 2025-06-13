@@ -136,7 +136,7 @@ pipeline {
                         id: 'frontend_input',
                         message: 'The Backend URL is required inother to proceed',
                         parameters: [
-                            string(name: 'BACKEND_URL', defaultValue: params.BACKEND_URL? : '' , description: 'Backend url made up of the protocol and host')
+                            string(name: 'BACKEND_URL', defaultValue: params.BACKEND_URL ?: '' , description: 'Backend url made up of the protocol and host')
                         ]
                      )
                  } else {
