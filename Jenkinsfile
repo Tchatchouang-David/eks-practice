@@ -88,12 +88,23 @@ pipeline {
         //     }
         // }
         //THE CODE ABOVE WONT WORK AND LEAD TO ERRORS BECAUSE THE BACKEND REQUIRES PARAMS LKE THE MASTER_USERNAME,... AND NOT HAVING THEM SET SINCE THE TEST IS MADE LOCALLY SHALL LEAD TO ERRORS EXCEPT IF YOU PREPARE A LOCAL DB FOR IT THAT SHALL MATCH ITS CREDENTIALS
-        stage('Push Backend Image to Docker Hub') {
+        stage("Push Backend Image to Docker Hub") {
             steps {
-                withCredentials([usernamePassword(credentialsId: '550b2578-f31d-4312-adbd-f0714cb4d0fe', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
-                    sh "docker tag ${params.BACKEND_BUILD_IMAGE}:${params.BACKEND_IMAGE_TAG} ${DOCKERHUB_USER}/${params.DOCKERHUB_BACKEND_REPO_NAME}:${params.BACKEND_IMAGE_TAG}"
-                    sh "docker login -u ${DOCKERHUB_USER} -p ${DOCKERHUB_PASS}"
-                    sh "docker push ${DOCKERHUB_USER}/${params.DOCKERHUB_BACKEND_REPO_NAME}:${params.BACKEND_IMAGE_TAG}"
+                timeout(time: 10, unit: 'MINUTES') {
+                    // Use Jenkins credentials (create a 'dockerhub-credentials' with your Docker Hub username/password)
+                    withCredentials([usernamePassword(
+                        credentialsId: '550b2578-f31d-4312-adbd-f0714cb4d0fe',
+                        usernameVariable: 'DOCKERHUB_USER', 
+                        passwordVariable: 'DOCKERHUB_PASS'
+                        )]) {
+                        sh "echo 'Tagging backend image for Docker Hub push...'"
+                        sh "docker tag ${params.BACKEND_BUILD_IMAGE}:${params.BACKEND_IMAGE_TAG} \${DOCKERHUB_USER}/${params.DOCKERHUB_BACKEND_REPO_NAME}:${params.BACKEND_IMAGE_TAG}"
+                        sh "echo 'Logging in to Docker Hub as \${DOCKERHUB_USER}'"
+                        sh "echo \${DOCKERHUB_PASS} | docker login -u \${DOCKERHUB_USER} --password-stdin"
+                        sh "echo 'Pushing backend image to Docker Hub...'"
+                        sh "docker push \${DOCKERHUB_USER}/${params.DOCKERHUB_BACKEND_REPO_NAME}:${params.BACKEND_IMAGE_TAG}"
+                        sh "echo 'Backend push completed successfully!'"
+                    }
                 }
             }
         }

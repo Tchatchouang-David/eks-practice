@@ -4,7 +4,7 @@ from parameters import master_username, db_password, endpoint, db_instance_name
 import requests, json
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+mysqlconnector://{master_username}:{db_password}@{endpoint}/{db_instance_name}'
+app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+mysqlconnector://{master_username}:{db_password}@{endpoint}/{db_instance_name}' #This shall build the endpoint that shall be used by the backend to communicate with our DB, we must make sure they're in the same network and the credentials are correct
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
