@@ -18,7 +18,7 @@ spec:
         env:
         - name: MYSQL_ROOT_PASSWORD
           value: "password"
-        - name: MYSQL_DATABASE
+        - name: MYSQL_DATABASE   #db instance name
           value: "flask_db"
         - name: MYSQL_USER
           value: "devops"

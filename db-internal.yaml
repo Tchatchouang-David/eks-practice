@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: mysql-service
 spec:
-  type: ClusterIP  # Internal only!
+  type: ClusterIP  # Internal only, act as an internal alb and its cluster ip shall be used as endpoint
   ports:
   - port: 3306
     targetPort: 3306
