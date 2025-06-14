@@ -53,14 +53,14 @@ pipeline {
             steps {
                 dir('backend') {
                     sh 'ls -la'
-                    sh '''
+                    sh """
                         echo "Updating parameters.py with database configuration..."
                         sed -i 's/^master_username = .*/master_username = "${MASTER_USERNAME}"/' parameters.py
                         sed -i 's/^db_password = .*/db_password = "${DB_PASSWORD}"/' parameters.py
                         sed -i 's|^endpoint = .*|endpoint = "${DB_ENDPOINT}"|' parameters.py
                         sed -i 's/^db_instance_name = .*/db_instance_name = "${DB_INSTANCE_NAME}"/' parameters.py
                         echo "Parameters updated. Building Docker image..."
-                    '''
+                    """
                     sh 'cat parameters.py'
                     sh "docker build -t ${params.BACKEND_BUILD_IMAGE}:${params.BACKEND_IMAGE_TAG} ."
                 }
