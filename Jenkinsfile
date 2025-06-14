@@ -158,6 +158,7 @@ pipeline {
                         sed -i "s#http://localhost:5000#${env.BACKEND_URL}#g" app.py
                         echo "Frontend configuration updated. Building Docker image..."
                     """
+                    sh "cat app.py"
                     sh "docker build -t ${params.FRONTEND_BUILD_IMAGE}:${params.FRONTEND_IMAGE_TAG} ."
                 }
             }
