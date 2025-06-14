@@ -134,11 +134,11 @@ pipeline {
             steps {
                 dir('frontend') {
                     sh 'ls -la'
-                    sh '''
+                    sh """
                         echo "Updating frontend app.py with backend URL: ${env.BACKEND_URL}"
                         sed -i "s#http://localhost:5000#${env.BACKEND_URL}#g" app.py
                         echo "Frontend configuration updated. Building Docker image..."
-                    '''
+                    """
                     sh "docker build -t ${params.FRONTEND_BUILD_IMAGE}:${params.FRONTEND_IMAGE_TAG} ."
                 }
             }
