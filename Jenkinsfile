@@ -61,6 +61,7 @@ pipeline {
                         sed -i 's/^db_instance_name = .*/db_instance_name = "${DB_INSTANCE_NAME}"/' parameters.py
                         echo "Parameters updated. Building Docker image..."
                     '''
+                    sh 'cat parameters.py'
                     sh "docker build -t ${params.BACKEND_BUILD_IMAGE}:${params.BACKEND_IMAGE_TAG} ."
                 }
             }
