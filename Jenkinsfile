@@ -110,21 +110,40 @@ pipeline {
             }
         }
 
-        stage('Validate Frontend Parameters') {
+        stage('Validate Frontend Parameters - Alternative') {
             steps {
                 script {
                     env.BACKEND_URL = params.BACKEND_URL
-                    while (!env.BACKEND_URL?.trim()) {
+                    
+                    if (!env.BACKEND_URL?.trim()) {
                         echo "⚠️ Backend URL is missing—please provide it."
-                        def userInput = input(
-                            id: 'FrontendParams',
-                            message: 'Enter Backend URL for Frontend build',
-                            parameters: [
-                                string(name: 'BACKEND_URL', defaultValue: env.BACKEND_URL ?: '', description: 'Protocol and host (e.g., http://your-backend:5000)')
-                            ]
-                        )
-                        env.BACKEND_URL = userInput.BACKEND_URL
+                        try {
+                            def userInput = input(
+                                id: 'FrontendParams',
+                                message: 'Enter Backend URL for Frontend build',
+                                ok: 'Submit',
+                                parameters: [
+                                    string(name: 'BACKEND_URL', defaultValue: '', description: 'Protocol and host (e.g., http://your-backend:5000)')
+                                ]
+                            )
+                            
+                            if (userInput instanceof String) {
+                                env.BACKEND_URL = userInput
+                            } else {
+                                env.BACKEND_URL = userInput.BACKEND_URL
+                            }
+                            
+                            // Validate the input is not empty
+                            if (!env.BACKEND_URL?.trim()) {
+                                error("Backend URL cannot be empty")
+                            }
+                            
+                        } catch (Exception e) {
+                            echo "Error: ${e.getMessage()}"
+                            error("Frontend parameter validation failed")
+                        }
                     }
+                    
                     echo "✅ Frontend will use BACKEND_URL: ${env.BACKEND_URL}"
                 }
             }
