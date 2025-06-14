@@ -11,7 +11,7 @@ def index():
     try:
         # URL du backend
         url = "http://localhost:5000/"
-        response = requests.get(url, timeout=60)
+        response = requests.get(url, timeout=60) 
         todos = json.loads(response.content)
     except Exception as ex:
         exc = str(ex)

@@ -168,10 +168,20 @@ pipeline {
 
         stage('Push Frontend Image to Docker Hub') {
             steps {
-                withCredentials([usernamePassword(credentialsId: '550b2578-f31d-4312-adbd-f0714cb4d0fe', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
-                    sh "docker tag ${params.FRONTEND_BUILD_IMAGE}:${params.FRONTEND_IMAGE_TAG} ${DOCKERHUB_USER}/${params.DOCKERHUB_FRONTEND_REPO_NAME}:${params.FRONTEND_IMAGE_TAG}"
-                    sh "docker login -u ${DOCKERHUB_USER} -p ${DOCKERHUB_PASS}"
-                    sh "docker push ${DOCKERHUB_USER}/${params.DOCKERHUB_FRONTEND_REPO_NAME}:${params.FRONTEND_IMAGE_TAG}"
+                timeout(time: 10, unit: 'MINUTES') {
+                    withCredentials([usernamePassword(
+                        credentialsId: '550b2578-f31d-4312-adbd-f0714cb4d0fe', 
+                        usernameVariable: 'DOCKERHUB_USER', 
+                        passwordVariable: 'DOCKERHUB_PASS'
+                    )]) {
+                        sh "echo 'Tagging frontend image for Docker Hub push...'"
+                        sh "docker tag ${params.FRONTEND_BUILD_IMAGE}:${params.FRONTEND_IMAGE_TAG} \${DOCKERHUB_USER}/${params.DOCKERHUB_FRONTEND_REPO_NAME}:${params.FRONTEND_IMAGE_TAG}"
+                        sh "echo 'Logging in to Docker Hub as \${DOCKERHUB_USER}'"
+                        sh "echo \${DOCKERHUB_PASS} | docker login -u \${DOCKERHUB_USER} --password-stdin"
+                        sh "echo 'Pushing frontend image to Docker Hub...'"
+                        sh "docker push \${DOCKERHUB_USER}/${params.DOCKERHUB_FRONTEND_REPO_NAME}:${params.FRONTEND_IMAGE_TAG}"
+                        sh "echo 'Frontend push completed successfully!'"
+                    }
                 }
             }
         }
